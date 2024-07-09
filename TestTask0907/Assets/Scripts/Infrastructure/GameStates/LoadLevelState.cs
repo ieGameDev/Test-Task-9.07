@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Infrastructure.Factory;
+using Assets.Scripts.Logic;
 using UnityEngine;
 
 namespace Assets.Scripts.Infrastructure.GameStates
@@ -28,13 +29,16 @@ namespace Assets.Scripts.Infrastructure.GameStates
         private void OnLoaded()
         {
             GameObject player = InitialPlayer();
-            //CameraFollow(player);
+            CameraFollow(player);
 
             InitialEnemies();
         }
 
-        private GameObject InitialPlayer() => 
+        private GameObject InitialPlayer() =>
             _gameFactory.CreatePlayer(GameObject.FindWithTag(PlayerInitialPointTag));
+
+        private void CameraFollow(GameObject player) => 
+            Camera.main.GetComponent<CameraFollow>().Follow(player);
 
         private void InitialEnemies()
         {

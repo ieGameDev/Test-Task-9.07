@@ -222,8 +222,9 @@ GameObject:
   - component: {fileID: 3954334038274245086}
   - component: {fileID: 6829996913496314176}
   - component: {fileID: 7314656249297875291}
-  - component: {fileID: 2085229812346247000}
   - component: {fileID: 7659972616481176027}
+  - component: {fileID: 2085229812346247000}
+  - component: {fileID: -4468396697632606979}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -296,28 +297,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!195 &2085229812346247000
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 703023192169621680}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.11
-  m_Speed: 3.5
-  m_Acceleration: 7.75
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1.8
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!136 &7659972616481176027
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -341,6 +320,42 @@ CapsuleCollider:
   m_Height: 1.8502505
   m_Direction: 1
   m_Center: {x: 0, y: 0.90875685, z: 0}
+--- !u!195 &2085229812346247000
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703023192169621680}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.11
+  m_Speed: 3.5
+  m_Acceleration: 7.75
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.8
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &-4468396697632606979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703023192169621680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 125079744252f33478b8b6cf8a1e0435, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _waypoints: []
 --- !u!1 &1098245581051809566
 GameObject:
   m_ObjectHideFlags: 0
