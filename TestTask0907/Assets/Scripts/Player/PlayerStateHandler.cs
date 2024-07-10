@@ -24,15 +24,11 @@ namespace Assets.Scripts.Player
                 case PlayerState.Idle:
                     HandleIdleState();
                     _animator.PlayIdle();
-
-                    Debug.Log("idle");
                     break;
 
                 case PlayerState.Run:
                     HandleRunState();
                     _animator.PlayRun();
-
-                    Debug.Log("run");
                     break;
             }
         }

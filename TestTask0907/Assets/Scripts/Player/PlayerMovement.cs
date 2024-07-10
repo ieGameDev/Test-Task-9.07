@@ -9,13 +9,14 @@ namespace Assets.Scripts.Player
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] private float _movementSpeed;
-        [SerializeField] private float _rotationSpeed;
         [SerializeField] private PlayerAnimator _animator;
 
         private NavMeshAgent _player;
         private Transform _spawnPoint;
         private PlayerStateMachine _stateMachine;
         private PlayerStateHandler _stateHandler;
+
+        private float _rotationSpeed = 5f;
 
         public Dictionary<int, Transform> Waypoints { get; set; }
         public List<int> SortedWaypointIds { get; set; }

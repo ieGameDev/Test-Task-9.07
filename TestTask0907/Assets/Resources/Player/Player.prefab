@@ -357,7 +357,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movementSpeed: 4
-  _rotationSpeed: 10
   _animator: {fileID: 87226138073986168}
 --- !u!114 &87226138073986168
 MonoBehaviour:
@@ -385,6 +384,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerMovement: {fileID: -4468396697632606979}
+  _rayLength: 100
+  _rayColorHit: {r: 1, g: 0, b: 0, a: 1}
+  _rayColorMiss: {r: 0, g: 1, b: 0, a: 1}
+  _enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _bulletPrefab: {fileID: 2410363882768578088, guid: fd71b7cc4521590498207b7b87cdd709, type: 3}
+  _bulletSpawnPoint: {fileID: 6683271862638392162}
+  _bulletSpeed: 10
 --- !u!1 &1098245581051809566
 GameObject:
   m_ObjectHideFlags: 0
@@ -2101,6 +2109,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b544049d07d56547bfe6ac16bfcc624, type: 3}
+--- !u!4 &6683271862638392162 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3404458928344204926, guid: 4b544049d07d56547bfe6ac16bfcc624, type: 3}
+  m_PrefabInstance: {fileID: 8322881921821553948}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7758792933783088942 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1741789224874678834, guid: 4b544049d07d56547bfe6ac16bfcc624, type: 3}
