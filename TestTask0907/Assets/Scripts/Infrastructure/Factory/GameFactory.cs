@@ -9,28 +9,33 @@ namespace Assets.Scripts.Infrastructure.Factory
     {
         private const string PlayerPath = "Player/Player";
         private const string EnemyPath = "Enemy/Enemy";
+
         private readonly IAssetsProvider _assetProvider;
 
-        public GameFactory(IAssetsProvider assetProvider) => 
-            _assetProvider = assetProvider;
+        private GameObject _player;
 
-        public GameObject PlayerGameObject;
+        public GameFactory(IAssetsProvider assetProvider) =>
+            _assetProvider = assetProvider;
 
         public GameObject CreatePlayer(GameObject initialPoint)
         {
-            PlayerGameObject = _assetProvider.Instantiate(PlayerPath, initialPoint.transform.position + Vector3.up * 1f);
+            _player = _assetProvider.Instantiate(PlayerPath, initialPoint.transform.position + Vector3.up * 1f);
 
-            PlayerGameObject
-                .GetComponent<PlayerMovement>()
-                .Construct(initialPoint, new PlayerStateMachine());
+            PlayerMovement playerMovement = _player.GetComponent<PlayerMovement>();
+            PlayerAnimator playerAnimator = _player.GetComponent<PlayerAnimator>();
+            PlayerAttack playerAttack = _player.GetComponent<PlayerAttack>();
 
-            return PlayerGameObject;
+            PlayerStateHandler playerStateHandler = new PlayerStateHandler(playerMovement, playerAttack, new PlayerStateMachine(), playerAnimator);
+
+            playerMovement.Construct(initialPoint, new PlayerStateMachine(), playerStateHandler);
+
+            return _player;
         }
 
         public GameObject CreateEnemy(GameObject initialPoint)
         {
             GameObject enemy = _assetProvider.Instantiate(EnemyPath, initialPoint.transform.position + Vector3.up * 1f);
-            enemy.GetComponent<EnemyMove>().Construct(PlayerGameObject);
+            enemy.GetComponent<EnemyMove>().Construct(_player);
 
             return enemy;
         }
