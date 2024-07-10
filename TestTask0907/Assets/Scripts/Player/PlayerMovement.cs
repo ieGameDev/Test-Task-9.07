@@ -8,12 +8,12 @@ namespace Assets.Scripts.Player
 {
     public class PlayerMovement : MonoBehaviour
     {
-        private const string PlayerInitialPointTag = "PlayerInitialPoint";
-
         [SerializeField] private float _movementSpeed = 3.5f;
+        [SerializeField] private PlayerAnimator _animator;
 
         private Transform _spawnPoint;
         private NavMeshAgent _player;
+        private PlayerStateMachine _stateMachine;
 
         private Dictionary<int, Transform> _waypoints;
         private List<int> _sortedWaypointIds;
@@ -21,9 +21,14 @@ namespace Assets.Scripts.Player
         private int _currentWaypointIndex = 0;
         private bool _waitingForTap = false;
 
+        public void Construct(GameObject spawnPoint, PlayerStateMachine stateMachine)
+        {
+            _spawnPoint = spawnPoint.transform;
+            _stateMachine = stateMachine;
+        }
+
         private void Start()
         {
-            _spawnPoint = GameObject.FindWithTag(PlayerInitialPointTag).transform;
             _player = GetComponent<NavMeshAgent>();
             _player.speed = _movementSpeed;
 
@@ -33,21 +38,38 @@ namespace Assets.Scripts.Player
 
         private void Update()
         {
-            if (_waitingForTap && Input.GetMouseButtonDown(0))
+            switch (_stateMachine.CurrentState)
             {
-                _waitingForTap = false;
+                case PlayerState.Idle:
+                    HandleIdleState();
+                    _animator.PlayIdle();
+                    break;
+                case PlayerState.Run:
+                    HandleRunState();
+                    _animator.PlayRun();
+                    break;
+            }
+        }
+
+        private void HandleIdleState()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                _stateMachine.SetState(PlayerState.Run);
                 MoveToNextWaypoint();
             }
+        }
 
-            if (!_waitingForTap && !_player.pathPending && _player.remainingDistance <= _player.stoppingDistance)
-            {
-                _waitingForTap = true;
-            }
+        private void HandleRunState()
+        {
+            if (ReachedDestination())
+                _stateMachine.SetState(PlayerState.Idle);
         }
 
         private void MoveToNextWaypoint()
         {
-            if (_sortedWaypointIds.Count == 0) return;
+            if (_sortedWaypointIds.Count == 0)
+                return;
 
             int nextWaypointId = _sortedWaypointIds[_currentWaypointIndex];
             _player.SetDestination(_waypoints[nextWaypointId].position);
@@ -68,5 +90,8 @@ namespace Assets.Scripts.Player
                 .Select(wp => wp.Key)
                 .ToList();
         }
+
+        private bool ReachedDestination() =>
+            !_player.pathPending && _player.remainingDistance <= _player.stoppingDistance;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Enemy;
 using Assets.Scripts.Infrastructure.AssetsManager;
+using Assets.Scripts.Player;
 using UnityEngine;
 
 namespace Assets.Scripts.Infrastructure.Factory
@@ -18,6 +19,10 @@ namespace Assets.Scripts.Infrastructure.Factory
         public GameObject CreatePlayer(GameObject initialPoint)
         {
             PlayerGameObject = _assetProvider.Instantiate(PlayerPath, initialPoint.transform.position + Vector3.up * 1f);
+
+            PlayerGameObject
+                .GetComponent<PlayerMovement>()
+                .Construct(initialPoint, new PlayerStateMachine());
 
             return PlayerGameObject;
         }
