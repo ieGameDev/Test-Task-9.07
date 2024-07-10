@@ -1,21 +1,21 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.Logic
 {
     public class WayPoint : MonoBehaviour
     {
-        public bool HasEnemy { get; set; }
+        private List<Collider> _enemiesOnWaypoint = new List<Collider>();
+
+        public bool HasEnemy => _enemiesOnWaypoint.Count > 0;
+
+        private void Update() =>
+            _enemiesOnWaypoint.RemoveAll(item => item == null);
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Enemy"))
-                HasEnemy = true;
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.CompareTag("Enemy"))
-                HasEnemy = false;
+                _enemiesOnWaypoint.Add(other);
         }
     }
 }

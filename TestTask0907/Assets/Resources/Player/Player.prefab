@@ -357,6 +357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movementSpeed: 4
+  _rotationSpeed: 10
   _animator: {fileID: 87226138073986168}
 --- !u!114 &87226138073986168
 MonoBehaviour:
@@ -384,7 +385,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerMovement: {fileID: -4468396697632606979}
-  _rotationSpeed: 100
 --- !u!1 &1098245581051809566
 GameObject:
   m_ObjectHideFlags: 0

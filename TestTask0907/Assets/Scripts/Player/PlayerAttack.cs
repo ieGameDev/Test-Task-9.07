@@ -11,8 +11,8 @@ namespace Assets.Scripts.Player
         {
             WayPoint waypoint = _playerMovement.NextWaypoint().GetComponent<WayPoint>();
 
-            if (waypoint != null)
-                return waypoint.HasEnemy;
+            if (waypoint != null && waypoint.HasEnemy)
+                return true;
 
             return false;
         }

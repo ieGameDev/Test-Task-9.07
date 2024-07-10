@@ -8,14 +8,14 @@ namespace Assets.Scripts.Player
 {
     public class PlayerMovement : MonoBehaviour
     {
-        [SerializeField] private float _movementSpeed = 3.5f;
+        [SerializeField] private float _movementSpeed;
+        [SerializeField] private float _rotationSpeed;
         [SerializeField] private PlayerAnimator _animator;
 
         private NavMeshAgent _player;
         private Transform _spawnPoint;
         private PlayerStateMachine _stateMachine;
         private PlayerStateHandler _stateHandler;
-        private bool _waitingForTap = false;
 
         public Dictionary<int, Transform> Waypoints { get; set; }
         public List<int> SortedWaypointIds { get; set; }
@@ -65,7 +65,7 @@ namespace Assets.Scripts.Player
         {
             Vector3 direction = (target - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * _movementSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * _rotationSpeed);
         }
 
         private void FindWaypoints()
