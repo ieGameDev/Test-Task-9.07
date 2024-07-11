@@ -5,6 +5,8 @@ namespace Assets.Scripts.Logic
 {
     public class WayPoint : MonoBehaviour
     {
+        private const string EnemyTag = "Enemy";
+
         private List<Collider> _enemiesOnWaypoint = new List<Collider>();
 
         public bool HasEnemy => _enemiesOnWaypoint.Count > 0;
@@ -14,7 +16,7 @@ namespace Assets.Scripts.Logic
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Enemy"))
+            if (other.CompareTag(EnemyTag))
                 _enemiesOnWaypoint.Add(other);
         }
     }

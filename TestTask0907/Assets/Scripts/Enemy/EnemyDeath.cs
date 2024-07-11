@@ -42,7 +42,7 @@ namespace Assets.Scripts.Enemy
 
         private IEnumerator Death()
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(1);
             Destroy(gameObject);
         }
     }

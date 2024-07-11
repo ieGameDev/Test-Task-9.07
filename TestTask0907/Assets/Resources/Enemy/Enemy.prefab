@@ -1609,7 +1609,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3094276968172803614}
   - component: {fileID: 3246176703546509785}
-  - component: {fileID: 5618372261070461901}
+  - component: {fileID: 1797372384161325418}
   - component: {fileID: 1494722064279163604}
   - component: {fileID: 9015671624603986375}
   - component: {fileID: 3712652983586556028}
@@ -1664,7 +1664,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!54 &5618372261070461901
+--- !u!54 &1797372384161325418
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

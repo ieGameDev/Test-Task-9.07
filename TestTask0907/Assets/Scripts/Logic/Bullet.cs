@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Enemy;
+using Assets.Scripts.ObjectPool;
 using UnityEngine;
 
 namespace Assets.Scripts.Logic
@@ -9,11 +10,13 @@ namespace Assets.Scripts.Logic
 
         private float _damage;
         private int _enemyLayer;
+        private PoolBase<GameObject> _bulletPool;
 
-        public void Initialize(float damage)
+        public void Initialize(float damage, PoolBase<GameObject> bulletPool)
         {
             _damage = damage;
             _enemyLayer = LayerMask.NameToLayer(LayerName);
+            _bulletPool = bulletPool;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -25,7 +28,7 @@ namespace Assets.Scripts.Logic
                 if (other.TryGetComponent(out health))
                     health.TakeDamage(_damage);
 
-                Destroy(gameObject);
+                _bulletPool.Return(gameObject);
             }
         }
     }
