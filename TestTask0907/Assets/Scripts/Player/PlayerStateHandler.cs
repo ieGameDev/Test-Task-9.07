@@ -41,7 +41,10 @@ namespace Assets.Scripts.Player
                 _playerMovement.MoveToNextWaypoint();
             }
             else if (_playerAttack.HasEnemiesOnWaypoint())
+            {
                 _playerMovement.RotateTowards(_playerMovement.NextWaypoint().position);
+                _playerAttack.Shoot();
+            }
         }
 
         private void HandleRunState()

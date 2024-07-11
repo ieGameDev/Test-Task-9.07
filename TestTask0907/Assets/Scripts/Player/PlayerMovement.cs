@@ -51,8 +51,12 @@ namespace Assets.Scripts.Player
             CurrentWaypointIndex = (CurrentWaypointIndex + 1) % SortedWaypointIds.Count;
         }
 
-        public bool ReachedDestination() =>
-            !_player.pathPending && _player.remainingDistance < _player.stoppingDistance;
+        public void RotateTowards(Vector3 target)
+        {
+            Vector3 direction = (target - transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * _rotationSpeed);
+        }
 
         public Transform NextWaypoint()
         {
@@ -62,12 +66,8 @@ namespace Assets.Scripts.Player
             return nextWaypoint;
         }
 
-        public void RotateTowards(Vector3 target)
-        {
-            Vector3 direction = (target - transform.position).normalized;
-            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * _rotationSpeed);
-        }
+        public bool ReachedDestination() =>
+            !_player.pathPending && _player.remainingDistance < _player.stoppingDistance;
 
         private void FindWaypoints()
         {

@@ -5,16 +5,26 @@ namespace Assets.Scripts.Logic
 {
     public class Bullet : MonoBehaviour
     {
-        private float _damage;
+        private const string LayerName = "Enemy";
 
-        public void Initialize(float damage) =>
+        private float _damage;
+        private int _enemyLayer;
+
+        public void Initialize(float damage)
+        {
             _damage = damage;
+            _enemyLayer = LayerMask.NameToLayer(LayerName);
+        }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Enemy"))
+            if (other.gameObject.layer == _enemyLayer)
             {
-                other.GetComponent<EnemyHealth>().TakeDamage(_damage);
+                IHealth health = null;
+
+                if (other.TryGetComponent(out health))
+                    health.TakeDamage(_damage);
+
                 Destroy(gameObject);
             }
         }
