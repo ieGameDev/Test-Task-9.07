@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Infrastructure.DI;
-using Assets.Scripts.InputServices;
+﻿using Assets.Scripts.InputServices;
 using Assets.Scripts.Logic;
 using Assets.Scripts.ObjectPool;
 using System.Collections;
@@ -19,20 +18,24 @@ namespace Assets.Scripts.Player
         [Header("Bullet Settings")]
         [SerializeField] private GameObject _bulletPrefab;
         [SerializeField] private Transform _bulletSpawnPoint;
-        [SerializeField] private float _bulletSpeed = 10f;
 
         private IInputService _input;
         private PoolBase<GameObject> _bulletPool;
         private Camera _camera;
-        private float _damage = 25f;
 
-        private void Awake()
+        private float _damage;
+        private float _bulletSpeed;
+
+        public void Construct(IInputService input, float damage, float bulletSpeed)
         {
-            _input = DIContainer.Container.Single<IInputService>();
             _camera = Camera.main;
-
-            _bulletPool = new PoolBase<GameObject>(PreloadBullet, GetAction, ReturnAction, PreloadCount);
+            _input = input;
+            _damage = damage;
+            _bulletSpeed = bulletSpeed;
         }
+
+        private void Awake() => 
+            _bulletPool = new PoolBase<GameObject>(PreloadBullet, GetAction, ReturnAction, PreloadCount);
 
         public bool HasEnemiesOnWaypoint()
         {
@@ -57,15 +60,21 @@ namespace Assets.Scripts.Player
 
             if (Physics.Raycast(ray, out hit, _rayLength, _enemyLayerMask))
             {
-                GameObject bullet = _bulletPool.Get();
-
-                Vector3 direction = (hit.point - _bulletSpawnPoint.position).normalized;
-
-                bullet.GetComponent<Rigidbody>().velocity = direction * _bulletSpeed;
-                bullet.GetComponent<Bullet>().Initialize(_damage, _bulletPool);
+                GameObject bullet = BulletInitialize(hit);
 
                 StartCoroutine(ReturnBullet(bullet));
             }
+        }
+
+        private GameObject BulletInitialize(RaycastHit hit)
+        {
+            GameObject bullet = _bulletPool.Get();
+
+            Vector3 direction = (hit.point - _bulletSpawnPoint.position).normalized;
+
+            bullet.GetComponent<Rigidbody>().velocity = direction * _bulletSpeed;
+            bullet.GetComponent<Bullet>().Initialize(_damage, _bulletPool);
+            return bullet;
         }
 
         private IEnumerator ReturnBullet(GameObject bullet)

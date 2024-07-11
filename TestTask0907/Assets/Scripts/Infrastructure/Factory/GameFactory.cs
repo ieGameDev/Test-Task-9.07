@@ -1,6 +1,9 @@
 ﻿using Assets.Scripts.Enemy;
 using Assets.Scripts.Infrastructure.AssetsManager;
+using Assets.Scripts.Infrastructure.DI;
+using Assets.Scripts.InputServices;
 using Assets.Scripts.Player;
+using Assets.Scripts.StaticData;
 using UnityEngine;
 
 namespace Assets.Scripts.Infrastructure.Factory
@@ -9,6 +12,7 @@ namespace Assets.Scripts.Infrastructure.Factory
     {
         private const string PlayerPath = "Player/Player";
         private const string EnemyPath = "Enemy/Enemy";
+        private const string PlayerDataPath = "StaticData/PlayerData";
 
         private readonly IAssetsProvider _assetProvider;
 
@@ -25,9 +29,17 @@ namespace Assets.Scripts.Infrastructure.Factory
             PlayerAnimator playerAnimator = _player.GetComponent<PlayerAnimator>();
             PlayerAttack playerAttack = _player.GetComponent<PlayerAttack>();
 
-            PlayerStateHandler playerStateHandler = new PlayerStateHandler(playerMovement, playerAttack, new PlayerStateMachine(), playerAnimator);
+            IInputService input = DIContainer.Container.Single<IInputService>();
+            PlayerStaticData staticData = Resources.Load<PlayerStaticData>(PlayerDataPath);
 
-            playerMovement.Construct(initialPoint, new PlayerStateMachine(), playerStateHandler);
+            float damage = staticData.Damage; 
+            float bulletSpeed = staticData.BulletSpeed;
+            playerAttack.Construct(input, damage, bulletSpeed);
+
+            PlayerStateMachine stateMachine = new PlayerStateMachine();
+            PlayerStateHandler playerStateHandler = new PlayerStateHandler(playerMovement, playerAttack, stateMachine, playerAnimator);
+
+            playerMovement.Construct(initialPoint, stateMachine, playerStateHandler);
 
             return _player;
         }
