@@ -5,9 +5,9 @@ namespace Assets.Scripts.Logic
 {
     public class Bullet : MonoBehaviour
     {
-        private int _damage;
+        private float _damage;
 
-        public void Initialize(int damage) =>
+        public void Initialize(float damage) =>
             _damage = damage;
 
         private void OnTriggerEnter(Collider other)

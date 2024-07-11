@@ -14,7 +14,7 @@ namespace Assets.Scripts.Player
         [SerializeField] private float _bulletSpeed = 10f;
 
         private Camera _camera;
-        private int _damage = 25;
+        private float _damage = 25f;
 
         private void Start() => 
             _camera = Camera.main;

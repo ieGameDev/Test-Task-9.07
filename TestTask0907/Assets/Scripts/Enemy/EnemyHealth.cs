@@ -3,23 +3,26 @@ using UnityEngine;
 
 namespace Assets.Scripts.Enemy
 {
-    public class EnemyHealth : MonoBehaviour
+    public class EnemyHealth : MonoBehaviour, IHealth
     {
-        private int _currentHealth;
-        private int _maxHealth = 100;
+        private float _currentHealth;
+        private float _maxHealth = 100f;
 
         public event Action HealthChanged;
 
-        public int CurrentHealth
+        public float CurrentHealth
         {
             get => _currentHealth;
             set => _currentHealth = value;
         }
 
-        private void Start() => 
-            CurrentHealth = _maxHealth;
+        public float MaxHealth => 
+            _maxHealth;
 
-        public void TakeDamage(int damage)
+        private void Start() =>
+            CurrentHealth = MaxHealth;
+
+        public void TakeDamage(float damage)
         {
             CurrentHealth -= damage;
 
