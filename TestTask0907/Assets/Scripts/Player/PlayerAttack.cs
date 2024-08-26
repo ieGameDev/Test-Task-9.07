@@ -34,7 +34,7 @@ namespace Assets.Scripts.Player
             _bulletSpeed = bulletSpeed;
         }
 
-        private void Awake() => 
+        private void Awake() =>
             _bulletPool = new PoolBase<GameObject>(PreloadBullet, GetAction, ReturnAction, PreloadCount);
 
         public bool HasEnemiesOnWaypoint()
@@ -58,19 +58,22 @@ namespace Assets.Scripts.Player
             Ray ray = _camera.ScreenPointToRay(inputPosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, _rayLength, _enemyLayerMask))
-            {
-                GameObject bullet = BulletInitialize(hit);
+            Vector3 targetPoint;
 
-                StartCoroutine(ReturnBullet(bullet));
-            }
+            if (Physics.Raycast(ray, out hit, _rayLength, _enemyLayerMask))
+                targetPoint = hit.point;
+            else
+                targetPoint = ray.GetPoint(_rayLength);
+
+            GameObject bullet = BulletInitialize(targetPoint);
+            StartCoroutine(ReturnBullet(bullet));
         }
 
-        private GameObject BulletInitialize(RaycastHit hit)
+        private GameObject BulletInitialize(Vector3 targetPoint)
         {
             GameObject bullet = _bulletPool.Get();
 
-            Vector3 direction = (hit.point - _bulletSpawnPoint.position).normalized;
+            Vector3 direction = (targetPoint - _bulletSpawnPoint.position).normalized;
 
             bullet.GetComponent<Rigidbody>().velocity = direction * _bulletSpeed;
             bullet.GetComponent<Bullet>().Initialize(_damage, _bulletPool);
@@ -83,7 +86,7 @@ namespace Assets.Scripts.Player
             _bulletPool.Return(bullet);
         }
 
-        private GameObject PreloadBullet() => 
+        private GameObject PreloadBullet() =>
             Instantiate(_bulletPrefab);
 
         private void GetAction(GameObject bullet)
@@ -93,7 +96,7 @@ namespace Assets.Scripts.Player
             bullet.SetActive(true);
         }
 
-        private void ReturnAction(GameObject bullet) => 
+        private void ReturnAction(GameObject bullet) =>
             bullet.SetActive(false);
     }
 }
