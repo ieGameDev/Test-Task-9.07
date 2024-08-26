@@ -93,10 +93,20 @@ namespace Assets.Scripts.Player
         {
             bullet.transform.position = _bulletSpawnPoint.position;
             bullet.transform.rotation = _bulletSpawnPoint.rotation;
+
+            TrailComponent(bullet)?.Clear();
+            TrailComponent(bullet).enabled = true;
+
             bullet.SetActive(true);
         }
 
-        private void ReturnAction(GameObject bullet) =>
+        private void ReturnAction(GameObject bullet)
+        {
+            TrailComponent(bullet).enabled = false;
             bullet.SetActive(false);
+        }
+
+        private static TrailRenderer TrailComponent(GameObject bullet) => 
+            bullet.GetComponent<TrailRenderer>();
     }
 }
