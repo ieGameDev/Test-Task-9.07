@@ -20,7 +20,7 @@ namespace Assets.Scripts.Player
         [SerializeField] private Transform _bulletSpawnPoint;
 
         private IInputService _input;
-        private PoolBase<GameObject> _bulletPool;
+        private PoolBase<BulletComponent> _bulletPool;
         private Camera _camera;
 
         private float _damage;
@@ -35,7 +35,7 @@ namespace Assets.Scripts.Player
         }
 
         private void Awake() =>
-            _bulletPool = new PoolBase<GameObject>(PreloadBullet, GetAction, ReturnAction, PreloadCount);
+            _bulletPool = new PoolBase<BulletComponent>(PreloadBullet, GetAction, ReturnAction, PreloadCount);
 
         public bool HasEnemiesOnWaypoint()
         {
@@ -65,32 +65,39 @@ namespace Assets.Scripts.Player
             else
                 targetPoint = ray.GetPoint(_rayLength);
 
-            GameObject bullet = BulletInitialize(targetPoint);
+            BulletComponent bullet = BulletInitialize(targetPoint);
             StartCoroutine(ReturnBullet(bullet));
         }
 
-        private GameObject BulletInitialize(Vector3 targetPoint)
+        private BulletComponent BulletInitialize(Vector3 targetPoint)
         {
-            GameObject bullet = _bulletPool.Get();
+            BulletComponent bullet = _bulletPool.Get();
 
             Vector3 direction = (targetPoint - _bulletSpawnPoint.position).normalized;
 
-            bullet.GetComponent<Rigidbody>().velocity = direction * _bulletSpeed;
-            bullet.GetComponent<Bullet>().Initialize(_damage, _bulletPool);
+            bullet.Rigidbody.velocity = direction * _bulletSpeed;
+            bullet.Bullet.Initialize(_damage, _bulletPool, bullet);
             return bullet;
         }
 
-        private IEnumerator ReturnBullet(GameObject bullet)
+        private IEnumerator ReturnBullet(BulletComponent bullet)
         {
             yield return new WaitForSeconds(2);
             _bulletPool.Return(bullet);
         }
 
-        private GameObject PreloadBullet() =>
-            Instantiate(_bulletPrefab);
-
-        private void GetAction(GameObject bullet)
+        private BulletComponent PreloadBullet()
         {
+            GameObject bulletObject = Instantiate(_bulletPrefab);
+            Bullet bullet = bulletObject.GetComponent<Bullet>();
+            Rigidbody rigidBody = bulletObject.GetComponent<Rigidbody>();
+
+            return new BulletComponent(bulletObject, bullet, rigidBody);
+        }
+
+        private void GetAction(BulletComponent bulletComponent)
+        {
+            GameObject bullet = bulletComponent.BulletObject;
             bullet.transform.position = _bulletSpawnPoint.position;
             bullet.transform.rotation = _bulletSpawnPoint.rotation;
 
@@ -100,8 +107,9 @@ namespace Assets.Scripts.Player
             bullet.SetActive(true);
         }
 
-        private void ReturnAction(GameObject bullet)
+        private void ReturnAction(BulletComponent bulletComponent)
         {
+            GameObject bullet = bulletComponent.BulletObject;
             TrailComponent(bullet).enabled = false;
             bullet.SetActive(false);
         }
