@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.Logic
 {
-    public class BulletComponent : MonoBehaviour
+    public class BulletComponent
     {
         public GameObject BulletObject { get; private set; }
         public Rigidbody Rigidbody { get; private set; }
