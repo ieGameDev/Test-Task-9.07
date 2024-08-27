@@ -8,7 +8,7 @@ namespace Assets.Scripts.Player
 {
     public class PlayerAttack : MonoBehaviour
     {
-        private const int PreloadCount = 20;
+        private const int PreloadCount = 30;
 
         [Header("Shooting Settings")]
         [SerializeField] private PlayerMovement _playerMovement;
@@ -91,8 +91,9 @@ namespace Assets.Scripts.Player
             GameObject bulletObject = Instantiate(_bulletPrefab);
             Bullet bullet = bulletObject.GetComponent<Bullet>();
             Rigidbody rigidBody = bulletObject.GetComponent<Rigidbody>();
+            TrailRenderer trailRenderer = bulletObject.GetComponent<TrailRenderer>();
 
-            return new BulletComponent(bulletObject, bullet, rigidBody);
+            return new BulletComponent(bulletObject, bullet, rigidBody, trailRenderer);
         }
 
         private void GetAction(BulletComponent bulletComponent)
@@ -101,8 +102,8 @@ namespace Assets.Scripts.Player
             bullet.transform.position = _bulletSpawnPoint.position;
             bullet.transform.rotation = _bulletSpawnPoint.rotation;
 
-            TrailComponent(bullet)?.Clear();
-            TrailComponent(bullet).enabled = true;
+            bulletComponent.TrailRenderer?.Clear();
+            bulletComponent.TrailRenderer.enabled = true;
 
             bullet.SetActive(true);
         }
@@ -110,11 +111,9 @@ namespace Assets.Scripts.Player
         private void ReturnAction(BulletComponent bulletComponent)
         {
             GameObject bullet = bulletComponent.BulletObject;
-            TrailComponent(bullet).enabled = false;
+            bulletComponent.TrailRenderer.enabled = false;
+
             bullet.SetActive(false);
         }
-
-        private static TrailRenderer TrailComponent(GameObject bullet) => 
-            bullet.GetComponent<TrailRenderer>();
     }
 }
